@@ -1,9 +1,9 @@
 use std::mem::MaybeUninit;
 
-extern crate va_list;
 extern crate libc;
+extern crate va_list;
 
-#[link(name = "va_list_test", kind="static")]
+#[link(name = "va_list_test", kind = "static")]
 extern "C" {
     fn dispatch(context: *mut u8, count: ::libc::c_uint, ...);
 }
@@ -32,7 +32,8 @@ macro_rules! test_va_list {
 #[test]
 fn trivial_values() {
     // Trivial test: Pass six random-ish sized integers
-    // - The tester consumes two arguments (context and count), so this is a total of 8 arguments - enough to overflow x86_64-elf
+    // - The tester consumes two arguments (context and count), so this is a total of 8 arguments -
+    //   enough to overflow x86_64-elf
     test_va_list!(
         4,
         (0xaabbaabbu32, 0xccddccddu32, 123456u32, 2u64, 1i32, -23i64),
@@ -73,7 +74,6 @@ fn trivial_values() {
 }
 
 #[test]
-#[cfg(not(all(target_arch = "x86_64", target_family = "unix")))] // TODO: Float on AMD64 unix
 fn floating_point() {
     test_va_list!(
         4,
